@@ -1,30 +1,37 @@
 import React from "react";
+import KeypadButton from './KeypadButton'
 
-function ProgrammerKeypad({ onKeyPress }) {
+const keys = [
+  { text: 'AC', value: 'Delete', color: 'highlight' },
+  { text: '⇦', value: 'Backspace', color: 'dark' },
+  { text: '%', value: '%', color: 'dark' },
+  { text: '/', value: '/', color: 'dark' },
+  { text: '1', value: '1', color: 'light' },
+  { text: '2', value: '2', color: 'light' },
+  { text: '3', value: '3', color: 'light' },
+  { text: '+', value: '+', color: 'dark' },
+  { text: '4', value: '4', color: 'light' },
+  { text: '5', value: '5', color: 'light' },
+  { text: '6', value: '6', color: 'light' },
+  { text: '-', value: '-', color: 'dark' },
+  { text: '7', value: '7', color: 'light' },
+  { text: '8', value: '8', color: 'light' },
+  { text: '9', value: '9', color: 'light' },
+  { text: '*', value: '*', color: 'dark' },
+  { text: '+/-', value: '+/-', color: 'light' },
+  { text: '0', value: '0', color: 'light' },
+  { text: '.', value: '.', color: 'light' },
+  { text: '=', value: 'Enter', color: 'dark' },
+]
+
+function StandardKeypad({ onKeyPress }) {
   return (
     <div className="grid grid-cols-4 text-slate-900 dark:text-slate-50 font-mono">
-    <button value={'Delete'} className="p-2 bg-orange-300 dark:bg-orange-600 hover:bg-orange-400 dark:hover:bg-orange-700 hover:font-black" onClick={({target: {value}}) => onKeyPress(value)}>AC</button>
-    <button value={'Backspace'} className="p-2 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-900 hover:font-black text-2xl" onClick={({target: {value}}) => onKeyPress(value)}>&#8678;</button>
-    <button value={'%'} className="p-2 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-900 hover:font-black" onClick={({target: {value}}) => onKeyPress(value)}>%</button>
-    <button value={'/'} className="p-2 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-900 hover:font-black" onClick={({target: {value}}) => onKeyPress(value)}>/</button>
-    <button value={'1'} className="p-2 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-800 hover:font-black" onClick={({target: {value}}) => onKeyPress(value)}>1</button>
-    <button value={'2'} className="p-2 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-800 hover:font-black" onClick={({target: {value}}) => onKeyPress(value)}>2</button>
-    <button value={'3'} className="p-2 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-800 hover:font-black" onClick={({target: {value}}) => onKeyPress(value)}>3</button>
-    <button value={'+'} className="p-2 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-900 hover:font-black" onClick={({target: {value}}) => onKeyPress(value)}>+</button>
-    <button value={'4'} className="p-2 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-800 hover:font-black" onClick={({target: {value}}) => onKeyPress(value)}>4</button>
-    <button value={'5'} className="p-2 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-800 hover:font-black" onClick={({target: {value}}) => onKeyPress(value)}>5</button>
-    <button value={'6'} className="p-2 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-800 hover:font-black" onClick={({target: {value}}) => onKeyPress(value)}>6</button>
-    <button value={'-'} className="p-2 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-900 hover:font-black" onClick={({target: {value}}) => onKeyPress(value)}>-</button>
-    <button value={'7'} className="p-2 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-800 hover:font-black" onClick={({target: {value}}) => onKeyPress(value)}>7</button>
-    <button value={'8'} className="p-2 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-800 hover:font-black" onClick={({target: {value}}) => onKeyPress(value)}>8</button>
-    <button value={'9'} className="p-2 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-800 hover:font-black" onClick={({target: {value}}) => onKeyPress(value)}>9</button>
-    <button value={'*'} className="p-2 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-900 hover:font-black" onClick={({target: {value}}) => onKeyPress(value)}>*</button>
-    <button value={'+/-'} className="p-2 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-800 hover:font-black" onClick={({target: {value}}) => onKeyPress(value)}>+/-</button>
-    <button value={'0'} className="p-2 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-800 hover:font-black" onClick={({target: {value}}) => onKeyPress(value)}>0</button>
-    <button value={'.'} className="p-2 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-800 hover:font-black" onClick={({target: {value}}) => onKeyPress(value)}>.</button>
-    <button value={'Enter'} className="p-2 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-900 hover:font-black" onClick={({target: {value}}) => onKeyPress(value)}>=</button>
+      {
+        keys.map(({text, value, color}) => <KeypadButton text={text} value={value} onClick={onKeyPress} color={color} onKeyPress={onKeyPress} />)
+      }
     </div>
   );
 }
 
-export default ProgrammerKeypad;
+export default StandardKeypad;

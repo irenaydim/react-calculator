@@ -1,6 +1,8 @@
 import React, {useState} from "react";
 import { useKeyPress } from "./useKeyPress";
 import ProgrammerKeypad from "./ProgrammerKeypad"
+import OutputScreen from "./OutputScreen"
+import BaseButton from "./BaseButton";
 
 function ProgrammerCalculator() {
   const [currVal, setCurrVal] = useState('')
@@ -90,13 +92,12 @@ function ProgrammerCalculator() {
 
   return (
     <>
-    <p className="w-full p-0 pr-2 font-mono text-sm text-right">{`${prevVal} ${lastOp}`}</p>
-        <input type="text" disabled className="w-full p-1 font-mono text-lg text-right dark:bg-slate-800 dark:text-slate-50" value={currVal} />
+      <OutputScreen primaryText={currVal} secondaryText={`${prevVal} ${lastOp}`} />
       <div className="grid grid-cols-1 gap-0 font-mono dark:bg-slate-800 dark:text-slate-50">
-        <button className='pl-2 text-left hover:bg-slate-50 dark:hover:bg-slate-900 border-slate-200 dark:border-slate-500' style={{ borderLeftWidth: base === 16 ? '5px' : 0}} value="hex" onClick={changeBase}>{`Hex ${(parseInt(currVal, base) || '').toString(16)}`}</button>
-        <button className='pl-2 text-left hover:bg-slate-50 dark:hover:bg-slate-900 border-slate-200 dark:border-slate-500' style={{ borderLeftWidth: base === 10 ? '5px' : 0}} value="dec" onClick={changeBase}>{`Dec ${(parseInt(currVal, base) || '').toString(10)}`}</button>
-        <button className='pl-2 text-left hover:bg-slate-50 dark:hover:bg-slate-900 border-slate-200 dark:border-slate-500' style={{ borderLeftWidth: base === 8 ? '5px' : 0}} value="oct" onClick={changeBase}>{`Oct ${(parseInt(currVal, base) || '').toString(8)}`}</button>
-        <button className='pl-2 text-left hover:bg-slate-50 dark:hover:bg-slate-900 border-slate-200 dark:border-slate-500' style={{ borderLeftWidth: base === 2 ? '5px' : 0}} value="bin" onClick={changeBase}>{`Bin ${(parseInt(currVal, base) || '').toString(2)}`}</button>
+        <BaseButton style={{ borderLeftWidth: base === 16 ? '5px' : 0}} value="hex" text={`Hex ${(parseInt(currVal, base) || '').toString(16)}`} onClick={changeBase} />
+        <BaseButton style={{ borderLeftWidth: base === 10 ? '5px' : 0}} value="dec" text={`Dec ${(parseInt(currVal, base) || '').toString(10)}`} onClick={changeBase} />
+        <BaseButton style={{ borderLeftWidth: base === 8 ? '5px' : 0}} value="oct" text={`Oct ${(parseInt(currVal, base) || '').toString(8)}`} onClick={changeBase} />
+        <BaseButton style={{ borderLeftWidth: base === 2 ? '5px' : 0}} value="bin" text={`Bin ${(parseInt(currVal, base) || '').toString(2)}`} onClick={changeBase} />
       </div>
       <ProgrammerKeypad onKeyPress={onKeyPress} base={base} />
       </>

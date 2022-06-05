@@ -17,7 +17,7 @@ function CalculatorLayout() {
   }, [darkMode])
 
   return (
-    <div className={"max-w-screen-sm mx-auto mt-4"}>
+    <div className={"max-w-screen-xs mx-auto mt-4"}>
       <div className="flex">
         <button className="px-3 py-1 mx-1 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-800 disabled:bg-slate-200 dark:disabled:bg-slate-800 text-slate-900 dark:text-slate-50 rounded-t-xl hover:font-bold hover:disabled:font-normal" onClick={() => setProgrammerMode(false)} disabled={!programmerMode}>Standard</button>
         <button className="px-3 py-1 mx-1 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-800 disabled:bg-slate-200 dark:disabled:bg-slate-800 text-slate-900 dark:text-slate-50 rounded-t-xl hover:font-bold hover:disabled:font-normal" onClick={() => setProgrammerMode(true)} disabled={programmerMode}>Programmer</button>

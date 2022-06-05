@@ -1,6 +1,7 @@
 import React, {useState} from "react";
 import { useKeyPress } from "./useKeyPress";
 import StandardKeypad from "./StandardKeypad"
+import OutputScreen from "./OutputScreen";
 
 function StandardCalculator() {
   const [currVal, setCurrVal] = useState('')
@@ -104,10 +105,9 @@ function StandardCalculator() {
   }
   return (
     <>
-    <p className="w-full p-0 pr-2 font-mono text-sm text-right">{`${prevVal} ${lastOp}`}</p>
-    <input type="text" disabled className="w-full p-1 font-mono text-lg text-right dark:bg-slate-800 dark:text-slate-50" value={currVal} />
+      <OutputScreen primaryText={currVal} secondaryText={`${prevVal} ${lastOp}`} />
       <StandardKeypad onKeyPress={onKeyPress} />
-      </>
+    </>
   );
 }
 
