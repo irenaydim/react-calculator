@@ -6,9 +6,10 @@ function ProgrammerCalculator() {
   const [currVal, setCurrVal] = useState('')
   const [prevVal, setPrevVal] = useState('')
   const [lastOp, setLastOp] = useState('')
+  const [base, setBase] = useState(10)
   const [clearCurr, setClearCurr] = useState(false)
 
-  useKeyPress(onKeyPress, ['0', '1', '2', '3', '4', '5','6','7','8','9', 'A', 'B', 'C', 'D', 'E', 'F', 'Enter', 'Delete']);
+  useKeyPress(onKeyPress, ['0', '1', '2', '3', '4', '5','6','7','8','9', 'A', 'B', 'C', 'D', 'E', 'F', 'Enter', 'Delete', 'Escape', 'Backspace']);
 
   function onKeyPress(value) {
     if (/^[0-9A-F]$/.test(value)) {
@@ -19,8 +20,10 @@ function ProgrammerCalculator() {
       handleEquals()
     } else if (value === '+/-') {
       handleSignToggle()
-    } else if (value === 'AC' || value === 'Delete') {
+    } else if (value === 'AC' || value === 'Delete' || value === 'Escape') {
       clearAll()
+    } else if (value === '<-' || value === 'Backspace') {
+      handleBack()
     }
   }
 
@@ -40,7 +43,7 @@ function ProgrammerCalculator() {
 
   function handleEquals() {
     if (currVal && prevVal && lastOp) {
-      setCurrVal(calculate(prevVal, currVal, lastOp))
+      setCurrVal(calculate(parseInt(prevVal, base), parseInt(currVal, base), lastOp, base))
       setLastOp('')
       setPrevVal('')
       setClearCurr(true)
@@ -49,7 +52,7 @@ function ProgrammerCalculator() {
 
   function handleOperation(op) {
     if (currVal && prevVal && !clearCurr) {
-      const res = calculate(prevVal, currVal, op)
+      const res = calculate(parseInt(prevVal, base), parseInt(currVal, base), op, base)
       setCurrVal(res)
       setPrevVal(res)
     } else {
@@ -60,28 +63,44 @@ function ProgrammerCalculator() {
   }
 
   function handleSignToggle() {
-    setCurrVal(calculate('', currVal || '0', '+/-'))
+    setCurrVal(calculate(0, parseInt(currVal, base) || '0', '+/-', base))
   }
 
-  function calculate(n1, n2, op) {
+  function handleBack() {
+    setCurrVal(currVal.slice(0, -1))
+  }
+
+  function calculate(n1, n2, op, base = 10) {
     switch(op) {
-      case '&': return (BigInt(n1) & BigInt(n2)).toString()
-      case '|': return (BigInt(n1) | BigInt(n2)).toString()
-      case '^': return (BigInt(n1) ^ BigInt(n2)).toString()
-      case '<<': return (BigInt(n1) << BigInt(n2)).toString()
-      case '>>': return (BigInt(n1) >> BigInt(n2)).toString()
-      case '+/-': return (BigInt(n2) * -1n).toString()
+      case '&': return (n1 & n2).toString(base)
+      case '|': return (n1 | n2).toString(base)
+      case '^': return (n1 ^ n2).toString(base)
+      case '<<': return (n1 << n2).toString(base)
+      case '>>': return (n1 >> n2).toString(base)
+      case '+/-': return (n2 * -1).toString(base)
       default: return n2
     }
+  }
+
+  function changeBase({target: {value}}) {
+    let newBase = value === 'hex' ? 16 : value === 'oct' ? 8 : value === 'bin' ? 2 : 10
+    setCurrVal((parseInt(currVal, base) || '').toString(newBase))
+    setBase(newBase)
   }
 
   return (
     <>
     <p className="w-full p-0 pr-2 font-mono text-sm text-right">{`${prevVal} ${lastOp}`}</p>
-    <input type="text" disabled className="w-full p-1 font-mono text-lg text-right" value={currVal} />
+        <input type="text" disabled className="w-full p-1 font-mono text-lg text-right" value={currVal} />
+      <div className="grid grid-cols-1 gap-0 font-mono">
+        <button className='pl-2 text-left hover:bg-slate-50 border-slate-200' style={{ borderLeftWidth: base === 16 ? '5px' : 0}} value="hex" onClick={changeBase}>{`Hex ${(parseInt(currVal, base) || '').toString(16)}`}</button>
+        <button className='pl-2 text-left hover:bg-slate-50 border-slate-200' style={{ borderLeftWidth: base === 10 ? '5px' : 0}} value="dec" onClick={changeBase}>{`Dec ${(parseInt(currVal, base) || '').toString(10)}`}</button>
+        <button className='pl-2 text-left hover:bg-slate-50 border-slate-200' style={{ borderLeftWidth: base === 8 ? '5px' : 0}} value="oct" onClick={changeBase}>{`Oct ${(parseInt(currVal, base) || '').toString(8)}`}</button>
+        <button className='pl-2 text-left hover:bg-slate-50 border-slate-200' style={{ borderLeftWidth: base === 2 ? '5px' : 0}} value="bin" onClick={changeBase}>{`Bin ${(parseInt(currVal, base) || '').toString(2)}`}</button>
+      </div>
       <div className="grid grid-cols-5 gap-2 bg-slate-800 text-slate-50 font-mono">
         {
-          ['AC', '', '&', '|', '^', '0', '1', '2', '3', '<<', '4', '5', '6', '7', '>>', '8', '9', 'A', 'B', '+/-', 'C', 'D', 'E', 'F', '='].map(item =>
+          ['AC', '<-', '&', '|', '^', '0', '1', '2', '3', '<<', '4', '5', '6', '7', '>>', '8', '9', 'A', 'B', '+/-', 'C', 'D', 'E', 'F', '='].map(item =>
             <Button key={item} value={item} onClick={({target: {value}}) => onKeyPress(value)} />)
         }
       </div>

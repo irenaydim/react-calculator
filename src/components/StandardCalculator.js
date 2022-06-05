@@ -8,7 +8,7 @@ function StandardCalculator() {
   const [lastOp, setLastOp] = useState('')
   const [clearCurr, setClearCurr] = useState(false)
 
-  useKeyPress(onKeyPress, ['+', '-', '*', '/', '0', '1', '2', '3', '4', '5','6','7','8','9', 'Enter', 'Delete']);
+  useKeyPress(onKeyPress, ['+', '-', '*', '/', '0', '1', '2', '3', '4', '5','6','7','8','9', 'Enter', 'Delete', 'Escape', 'Backspace']);
 
   function onKeyPress(value) {
     if (/^[0-9]$/.test(value)) {
@@ -21,9 +21,11 @@ function StandardCalculator() {
       handlePercent()
     } else if (value === '+/-') {
       handleSignToggle()
-    } else if (value === 'AC' || value === 'Delete') {
-      clearAll()
-    } else if (value === '.') {
+    } else if (value === 'AC' || value === 'Delete' || value === 'Escape') {
+    clearAll()
+  } else if (value === '<-' || value === 'Backspace') {
+    handleBack()
+  }else if (value === '.') {
       handleDot()
     }
   }
@@ -85,6 +87,10 @@ function StandardCalculator() {
     }
   }
 
+  function handleBack() {
+    setCurrVal(currVal.slice(0, -1))
+  }
+
   function calculate(n1, n2, op) {
     switch(op) {
       case '+': return (parseFloat(n1) + parseFloat(n2)).toString()
@@ -102,7 +108,7 @@ function StandardCalculator() {
     <input type="text" disabled className="w-full p-1 font-mono text-lg text-right" value={currVal} />
       <div className="grid grid-cols-4 gap-2 bg-slate-800 text-slate-50 font-mono">
         {
-          ['AC', '', '%', '/', '1', '2', '3', '+', '4', '5', '6', '-', '7', '8', '9', '*', '+/-', '0', '.', '='].map(item =>
+          ['AC', '<-', '%', '/', '1', '2', '3', '+', '4', '5', '6', '-', '7', '8', '9', '*', '+/-', '0', '.', '='].map(item =>
             <Button key={item} value={item} onClick={({target: {value}}) => onKeyPress(value)} />)
         }
       </div>
