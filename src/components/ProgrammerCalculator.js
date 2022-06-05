@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import { useKeyPress } from "./useKeyPress";
-import Button from "./Button"
+import ProgrammerKeypad from "./ProgrammerKeypad"
 
 function ProgrammerCalculator() {
   const [currVal, setCurrVal] = useState('')
@@ -16,13 +16,13 @@ function ProgrammerCalculator() {
       handleDigit(value)
     } else if (/^[&|^]$/.test(value) || value === '<<' || value === '>>') {
       handleOperation(value)
-    } else if (value === '=' || value === 'Enter') {
+    } else if (value === 'Enter') {
       handleEquals()
     } else if (value === '+/-') {
       handleSignToggle()
-    } else if (value === 'AC' || value === 'Delete' || value === 'Escape') {
+    } else if (value === 'Delete' || value === 'Escape') {
       clearAll()
-    } else if (value === '<-' || value === 'Backspace') {
+    } else if (value === 'Backspace') {
       handleBack()
     }
   }
@@ -98,12 +98,7 @@ function ProgrammerCalculator() {
         <button className='pl-2 text-left hover:bg-slate-50 border-slate-200' style={{ borderLeftWidth: base === 8 ? '5px' : 0}} value="oct" onClick={changeBase}>{`Oct ${(parseInt(currVal, base) || '').toString(8)}`}</button>
         <button className='pl-2 text-left hover:bg-slate-50 border-slate-200' style={{ borderLeftWidth: base === 2 ? '5px' : 0}} value="bin" onClick={changeBase}>{`Bin ${(parseInt(currVal, base) || '').toString(2)}`}</button>
       </div>
-      <div className="grid grid-cols-5 gap-2 bg-slate-800 text-slate-50 font-mono">
-        {
-          ['AC', '<-', '&', '|', '^', '0', '1', '2', '3', '<<', '4', '5', '6', '7', '>>', '8', '9', 'A', 'B', '+/-', 'C', 'D', 'E', 'F', '='].map(item =>
-            <Button key={item} value={item} onClick={({target: {value}}) => onKeyPress(value)} />)
-        }
-      </div>
+      <ProgrammerKeypad onKeyPress={onKeyPress} base={base} />
       </>
   );
 }

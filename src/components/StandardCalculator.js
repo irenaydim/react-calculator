@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import { useKeyPress } from "./useKeyPress";
-import Button from "./Button"
+import StandardKeypad from "./StandardKeypad"
 
 function StandardCalculator() {
   const [currVal, setCurrVal] = useState('')
@@ -15,15 +15,15 @@ function StandardCalculator() {
       handleDigit(value)
     } else if (/^[/\-+*]$/.test(value)) {
       handleOperation(value)
-    } else if (value === '=' || value === 'Enter') {
+    } else if (value === 'Enter') {
       handleEquals()
     } else if (value === '%') {
       handlePercent()
     } else if (value === '+/-') {
       handleSignToggle()
-    } else if (value === 'AC' || value === 'Delete' || value === 'Escape') {
+    } else if (value === 'Delete' || value === 'Escape') {
     clearAll()
-  } else if (value === '<-' || value === 'Backspace') {
+  } else if ( value === 'Backspace') {
     handleBack()
   }else if (value === '.') {
       handleDot()
@@ -106,12 +106,7 @@ function StandardCalculator() {
     <>
     <p className="w-full p-0 pr-2 font-mono text-sm text-right">{`${prevVal} ${lastOp}`}</p>
     <input type="text" disabled className="w-full p-1 font-mono text-lg text-right" value={currVal} />
-      <div className="grid grid-cols-4 gap-2 bg-slate-800 text-slate-50 font-mono">
-        {
-          ['AC', '<-', '%', '/', '1', '2', '3', '+', '4', '5', '6', '-', '7', '8', '9', '*', '+/-', '0', '.', '='].map(item =>
-            <Button key={item} value={item} onClick={({target: {value}}) => onKeyPress(value)} />)
-        }
-      </div>
+      <StandardKeypad onKeyPress={onKeyPress} />
       </>
   );
 }
