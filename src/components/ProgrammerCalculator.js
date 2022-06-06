@@ -3,6 +3,7 @@ import { useKeyPress } from '../hooks/useKeyPress'
 import ProgrammerKeypad from './ProgrammerKeypad'
 import OutputScreen from './OutputScreen'
 import BaseButton from './BaseButton'
+import { calculate } from '../utils/calculate'
 
 function ProgrammerCalculator() {
   const [currVal, setCurrVal] = useState('')
@@ -70,18 +71,6 @@ function ProgrammerCalculator() {
 
   function handleBack() {
     setCurrVal(currVal.slice(0, -1))
-  }
-
-  function calculate(n1, n2, op, numBase = 10) {
-    switch (op) {
-    case '&': return (n1 & n2).toString(numBase)
-    case '|': return (n1 | n2).toString(numBase)
-    case '^': return (n1 ^ n2).toString(numBase)
-    case '<<': return (n1 << n2).toString(numBase)
-    case '>>': return (n1 >> n2).toString(numBase)
-    case '+/-': return (n2 * -1).toString(numBase)
-    default: return n2
-    }
   }
 
   function changeBase({ target: { value } }) {

@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useKeyPress } from '../hooks/useKeyPress'
 import StandardKeypad from './StandardKeypad'
 import OutputScreen from './OutputScreen'
+import { calculate } from '../utils/calculate'
 
 function StandardCalculator() {
   const [currVal, setCurrVal] = useState('')
@@ -49,7 +50,7 @@ function StandardCalculator() {
 
   function handleEquals() {
     if (currVal && prevVal && lastOp) {
-      setCurrVal(calculate(prevVal, currVal, lastOp))
+      setCurrVal(calculate(parseFloat(prevVal), parseFloat(currVal), lastOp))
       setLastOp('')
       setPrevVal('')
       setClearCurr(true)
@@ -58,7 +59,7 @@ function StandardCalculator() {
 
   function handleOperation(op) {
     if (currVal && prevVal && !clearCurr) {
-      const res = calculate(prevVal, currVal, lastOp)
+      const res = calculate(parseFloat(prevVal), parseFloat(currVal), lastOp)
       setCurrVal(res)
       setPrevVal(res)
     } else {
@@ -70,15 +71,15 @@ function StandardCalculator() {
 
   function handlePercent() {
     if (lastOp === '+' || lastOp === '-') {
-      setCurrVal(calculate(prevVal, currVal, '%'))
+      setCurrVal(calculate(parseFloat(prevVal), parseFloat(currVal), '%'))
     } else {
-      setCurrVal(calculate(1, currVal, '%'))
+      setCurrVal(calculate(1, parseFloat(currVal), '%'))
     }
     setClearCurr(true)
   }
 
   function handleSignToggle() {
-    setCurrVal(calculate('', currVal || '0', '+/-'))
+    setCurrVal(calculate(0, parseFloat(currVal) || 0, '+/-'))
   }
 
   function handleDot() {
@@ -92,18 +93,6 @@ function StandardCalculator() {
 
   function handleBack() {
     setCurrVal(currVal.slice(0, -1))
-  }
-
-  function calculate(n1, n2, op) {
-    switch (op) {
-    case '+': return (parseFloat(n1) + parseFloat(n2)).toString()
-    case '-': return (parseFloat(n1) - parseFloat(n2)).toString()
-    case '*': return (parseFloat(n1) * parseFloat(n2)).toString()
-    case '/': return (parseFloat(n1) / parseFloat(n2)).toString()
-    case '%': return (parseFloat(n1) * parseFloat(n2) / 100).toString()
-    case '+/-': return (parseFloat(n2) * -1).toString()
-    default: return n2
-    }
   }
   return (
     <>

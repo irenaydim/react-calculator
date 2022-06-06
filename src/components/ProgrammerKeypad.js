@@ -1,5 +1,6 @@
 import React from 'react'
 import KeypadButton from './KeypadButton'
+import PropTypes from 'prop-types'
 
 const keys = [
   { text: 'AC', value: 'Delete', color: 'highlight' },
@@ -47,6 +48,10 @@ function ProgrammerKeypad({ onKeyPress, base }) {
       }
     </div>
   )
+}
+
+ProgrammerKeypad.propTypes = {
+  onKeyPress: PropTypes.func.isRequired
 }
 
 export default ProgrammerKeypad

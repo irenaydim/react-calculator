@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 function KeypadButton({ text, value: buttonValue, onClick, disabled, color = 'light' }) {
   const className = color === 'highlight'
@@ -16,6 +17,14 @@ function KeypadButton({ text, value: buttonValue, onClick, disabled, color = 'li
     >
       {text}
     </button>)
+}
+
+KeypadButton.propTypes = {
+  color: PropTypes.string.isRequired,
+  disabled: PropTypes.bool.isRequired,
+  onClick: PropTypes.func.isRequired,
+  text: PropTypes.string.isRequired,
+  value: PropTypes.string.isRequired
 }
 
 export default KeypadButton
