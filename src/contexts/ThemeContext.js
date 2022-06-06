@@ -1,8 +1,8 @@
-import React from "react"
+import React from 'react'
 
 const ThemeContext = React.createContext({
   darkMode: false,
-  setDarkMode: () => {},
+  setDarkMode: () => {}
 })
 
 export default ThemeContext

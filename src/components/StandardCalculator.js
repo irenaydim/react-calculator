@@ -1,7 +1,7 @@
-import React, {useState} from "react";
-import { useKeyPress } from "./useKeyPress";
-import StandardKeypad from "./StandardKeypad"
-import OutputScreen from "./OutputScreen";
+import React, { useState } from 'react'
+import { useKeyPress } from '../hooks/useKeyPress'
+import StandardKeypad from './StandardKeypad'
+import OutputScreen from './OutputScreen'
 
 function StandardCalculator() {
   const [currVal, setCurrVal] = useState('')
@@ -9,12 +9,12 @@ function StandardCalculator() {
   const [lastOp, setLastOp] = useState('')
   const [clearCurr, setClearCurr] = useState(false)
 
-  useKeyPress(onKeyPress, ['+', '-', '*', '/', '0', '1', '2', '3', '4', '5','6','7','8','9', 'Enter', 'Delete', 'Escape', 'Backspace']);
+  useKeyPress(onKeyPress, ['+', '-', '*', '/', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.', 'Enter', 'Delete', 'Escape', 'Backspace'])
 
   function onKeyPress(value) {
-    if (/^[0-9]$/.test(value)) {
+    if ((/^[0-9]$/).test(value)) {
       handleDigit(value)
-    } else if (/^[/\-+*]$/.test(value)) {
+    } else if ((/^[/\-+*]$/).test(value)) {
       handleOperation(value)
     } else if (value === 'Enter') {
       handleEquals()
@@ -23,16 +23,18 @@ function StandardCalculator() {
     } else if (value === '+/-') {
       handleSignToggle()
     } else if (value === 'Delete' || value === 'Escape') {
-    clearAll()
-  } else if ( value === 'Backspace') {
-    handleBack()
-  }else if (value === '.') {
+      clearAll()
+    } else if (value === 'Backspace') {
+      handleBack()
+    } else if (value === '.') {
       handleDot()
     }
   }
 
   function handleDigit(digit) {
-    setCurrVal(currVal !== '0' && !clearCurr ? currVal + digit : digit)
+    setCurrVal(currVal !== '0' && !clearCurr
+      ? currVal + digit
+      : digit)
     if (clearCurr) {
       setClearCurr(false)
     }
@@ -56,7 +58,7 @@ function StandardCalculator() {
 
   function handleOperation(op) {
     if (currVal && prevVal && !clearCurr) {
-      const res = calculate(prevVal, currVal, op)
+      const res = calculate(prevVal, currVal, lastOp)
       setCurrVal(res)
       setPrevVal(res)
     } else {
@@ -80,8 +82,8 @@ function StandardCalculator() {
   }
 
   function handleDot() {
-    if (!/\./.test(currVal)) {
-      setCurrVal(currVal !== '' ? `${currVal}.` : '0.')
+    if (!(/\./).test(currVal)) {
+      setCurrVal(currVal !== '' && !clearCurr ? `${currVal}.` : '0.')
       if (clearCurr) {
         setClearCurr(false)
       }
@@ -93,14 +95,14 @@ function StandardCalculator() {
   }
 
   function calculate(n1, n2, op) {
-    switch(op) {
-      case '+': return (parseFloat(n1) + parseFloat(n2)).toString()
-      case '-': return (parseFloat(n1) - parseFloat(n2)).toString()
-      case '*': return (parseFloat(n1) * parseFloat(n2)).toString()
-      case '/': return (parseFloat(n1) / parseFloat(n2)).toString()
-      case '%': return (parseFloat(n1) * parseFloat(n2) / 100).toString()
-      case '+/-': return (parseFloat(n2) * -1).toString()
-      default: return n2
+    switch (op) {
+    case '+': return (parseFloat(n1) + parseFloat(n2)).toString()
+    case '-': return (parseFloat(n1) - parseFloat(n2)).toString()
+    case '*': return (parseFloat(n1) * parseFloat(n2)).toString()
+    case '/': return (parseFloat(n1) / parseFloat(n2)).toString()
+    case '%': return (parseFloat(n1) * parseFloat(n2) / 100).toString()
+    case '+/-': return (parseFloat(n2) * -1).toString()
+    default: return n2
     }
   }
   return (
@@ -108,7 +110,7 @@ function StandardCalculator() {
       <OutputScreen primaryText={currVal} secondaryText={`${prevVal} ${lastOp}`} />
       <StandardKeypad onKeyPress={onKeyPress} />
     </>
-  );
+  )
 }
 
-export default StandardCalculator;
+export default StandardCalculator

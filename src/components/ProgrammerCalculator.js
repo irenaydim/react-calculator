@@ -1,8 +1,8 @@
-import React, {useState} from "react";
-import { useKeyPress } from "./useKeyPress";
-import ProgrammerKeypad from "./ProgrammerKeypad"
-import OutputScreen from "./OutputScreen"
-import BaseButton from "./BaseButton";
+import React, { useState } from 'react'
+import { useKeyPress } from '../hooks/useKeyPress'
+import ProgrammerKeypad from './ProgrammerKeypad'
+import OutputScreen from './OutputScreen'
+import BaseButton from './BaseButton'
 
 function ProgrammerCalculator() {
   const [currVal, setCurrVal] = useState('')
@@ -11,12 +11,12 @@ function ProgrammerCalculator() {
   const [base, setBase] = useState(10)
   const [clearCurr, setClearCurr] = useState(false)
 
-  useKeyPress(onKeyPress, ['0', '1', '2', '3', '4', '5','6','7','8','9', 'A', 'B', 'C', 'D', 'E', 'F', 'Enter', 'Delete', 'Escape', 'Backspace']);
+  useKeyPress(onKeyPress, ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'a', 'b', 'c', 'd', 'e', 'f', 'Enter', 'Delete', 'Escape', 'Backspace'])
 
   function onKeyPress(value) {
-    if (/^[0-9A-F]$/.test(value)) {
+    if ((/^[0-9A-Fa-f]$/).test(value)) {
       handleDigit(value)
-    } else if (/^[&|^]$/.test(value) || value === '<<' || value === '>>') {
+    } else if ((/^[&|^]$/).test(value) || value === '<<' || value === '>>') {
       handleOperation(value)
     } else if (value === 'Enter') {
       handleEquals()
@@ -54,7 +54,7 @@ function ProgrammerCalculator() {
 
   function handleOperation(op) {
     if (currVal && prevVal && !clearCurr) {
-      const res = calculate(parseInt(prevVal, base), parseInt(currVal, base), op, base)
+      const res = calculate(parseInt(prevVal, base), parseInt(currVal, base), lastOp, base)
       setCurrVal(res)
       setPrevVal(res)
     } else {
@@ -72,20 +72,20 @@ function ProgrammerCalculator() {
     setCurrVal(currVal.slice(0, -1))
   }
 
-  function calculate(n1, n2, op, base = 10) {
-    switch(op) {
-      case '&': return (n1 & n2).toString(base)
-      case '|': return (n1 | n2).toString(base)
-      case '^': return (n1 ^ n2).toString(base)
-      case '<<': return (n1 << n2).toString(base)
-      case '>>': return (n1 >> n2).toString(base)
-      case '+/-': return (n2 * -1).toString(base)
-      default: return n2
+  function calculate(n1, n2, op, numBase = 10) {
+    switch (op) {
+    case '&': return (n1 & n2).toString(numBase)
+    case '|': return (n1 | n2).toString(numBase)
+    case '^': return (n1 ^ n2).toString(numBase)
+    case '<<': return (n1 << n2).toString(numBase)
+    case '>>': return (n1 >> n2).toString(numBase)
+    case '+/-': return (n2 * -1).toString(numBase)
+    default: return n2
     }
   }
 
-  function changeBase({target: {value}}) {
-    let newBase = value === 'hex' ? 16 : value === 'oct' ? 8 : value === 'bin' ? 2 : 10
+  function changeBase({ target: { value } }) {
+    const newBase = value === 'hex' ? 16 : value === 'oct' ? 8 : value === 'bin' ? 2 : 10
     setCurrVal((parseInt(currVal, base) || '').toString(newBase))
     setBase(newBase)
   }
@@ -94,14 +94,14 @@ function ProgrammerCalculator() {
     <>
       <OutputScreen primaryText={currVal} secondaryText={`${prevVal} ${lastOp}`} />
       <div className="grid grid-cols-1 gap-0 font-mono dark:bg-slate-800 dark:text-slate-50">
-        <BaseButton style={{ borderLeftWidth: base === 16 ? '5px' : 0}} value="hex" text={`Hex ${(parseInt(currVal, base) || '').toString(16)}`} onClick={changeBase} />
-        <BaseButton style={{ borderLeftWidth: base === 10 ? '5px' : 0}} value="dec" text={`Dec ${(parseInt(currVal, base) || '').toString(10)}`} onClick={changeBase} />
-        <BaseButton style={{ borderLeftWidth: base === 8 ? '5px' : 0}} value="oct" text={`Oct ${(parseInt(currVal, base) || '').toString(8)}`} onClick={changeBase} />
-        <BaseButton style={{ borderLeftWidth: base === 2 ? '5px' : 0}} value="bin" text={`Bin ${(parseInt(currVal, base) || '').toString(2)}`} onClick={changeBase} />
+        <BaseButton componentStyle={{ borderLeftWidth: base === 16 ? '5px' : 0 }} value="hex" text={`Hex ${(parseInt(currVal, base) || '').toString(16).toUpperCase()}`} onClick={changeBase} />
+        <BaseButton componentStyle={{ borderLeftWidth: base === 10 ? '5px' : 0 }} value="dec" text={`Dec ${(parseInt(currVal, base) || '').toString(10)}`} onClick={changeBase} />
+        <BaseButton componentStyle={{ borderLeftWidth: base === 8 ? '5px' : 0 }} value="oct" text={`Oct ${(parseInt(currVal, base) || '').toString(8)}`} onClick={changeBase} />
+        <BaseButton componentStyle={{ borderLeftWidth: base === 2 ? '5px' : 0 }} value="bin" text={`Bin ${(parseInt(currVal, base) || '').toString(2)}`} onClick={changeBase} />
       </div>
       <ProgrammerKeypad onKeyPress={onKeyPress} base={base} />
-      </>
-  );
+    </>
+  )
 }
 
-export default ProgrammerCalculator;
+export default ProgrammerCalculator
