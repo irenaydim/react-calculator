@@ -1,7 +1,9 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 
 export function useKeyPress(callback, keyCodes) {
   const handler = (event) => {
+    // eslint-disable-next-line no-console
+    console.log('hook handler called')
     const { key } = event
     if (keyCodes.includes(key)) {
       event.preventDefault()
@@ -9,10 +11,17 @@ export function useKeyPress(callback, keyCodes) {
     }
   }
 
+  const cbRef = useRef(handler)
+
   useEffect(() => {
-    window.addEventListener('keydown', handler)
-    return () => {
-      window.removeEventListener('keydown', handler)
-    }
+    cbRef.current = handler
   })
+
+  useEffect(() => {
+    const cb = (e) => cbRef.current(e)
+    window.addEventListener('keydown', cb)
+    return () => {
+      window.removeEventListener('keydown', cb)
+    }
+  }, [])
 }
